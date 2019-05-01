@@ -1,1 +1,143 @@
+# packages used or needed for this project
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly 
+from collections import OrderedDict
+plotly.tools.set_credentials_file(username='33hooper', api_key='UwmmblIUP0njMdQYhj5W')
+
+
+# soruce: https://datatofish.com/read_excel/
+# to import Excel files
+import tkinter as tk
+from tkinter import filedialog
+import pandas as pd
+
+root= tk.Tk()
+
+canvas1 = tk.Canvas(root, width = 300, height = 300, bg = 'lightsteelblue')
+canvas1.pack()
+
+def getExcel ():
+    global df
+    
+    import_file_path = filedialog.askopenfilename()
+    df = pd.read_excel (import_file_path)
+    print (df)
+    
+browseButton_Excel = tk.Button(text='Import Excel File', command=getExcel, bg='green', fg='white', font=('helvetica', 12, 'bold'))
+canvas1.create_window(150, 150, window=browseButton_Excel)
+
+root.mainloop()
+# excel file now is df in python
+
+
+# use head() function to get a quick view of the dataset
+df.head()
+# or I can use indexing [rows: columns]
+df.iloc[0:5,0:9]
+
+# to extract only the two columns and drop NaN values
+df[["Altitude (ft)", "Aircraft address"]].dropna()
+
+# save that to a new dataframe
+df1 = df[["Altitude (ft)", "Aircraft address"]].dropna()
+
+# show the most common Altitudes using panda plot function
+df1['Altitude (ft)'].plot(kind= "hist") # this is a test run
+
+# find the average Altitude of registered flights passing through Atlanta Metro-Area
+df1['Altitude (ft)'].mean()
+
+# take out negative values for Altittude (probably wrong outputs received)
+alt_filter = df1['Altitude (ft)'] > 0
+df1 = df1[alt_filter]
+
+# make different Altitude Level, increment of 5000 ft
+# 0 - 5000
+alt_filter_5000 = df1['Altitude (ft)'] <= 5000
+one_inc = df1[alt_filter_5000]
+one_inc_avg = one_inc['Altitude (ft)'].mean() # find the average Altitude for this level
+one_inc_count = len(one_inc["Aircraft address"].unique()) # find the number of airplanes are in this level
+
+#5000 - 10000
+alt_filter_10000 = (df1['Altitude (ft)'] > 5000) & (df1['Altitude (ft)'] <= 10000)
+two_inc = df1[alt_filter_10000]
+two_inc_avg = two_inc['Altitude (ft)'].mean() # find the average Altitude for this level
+two_inc_count = len(two_inc["Aircraft address"].unique()) # find the number of airplanes are in this level
+
+# 10000 - 15000
+alt_filter_15000 = (df1['Altitude (ft)'] > 10000) & (df1['Altitude (ft)'] <= 15000)
+three_inc = df1[alt_filter_15000]
+three_inc_avg = three_inc['Altitude (ft)'].mean() # find the average Altitude for this level
+three_inc_count = len(three_inc["Aircraft address"].unique()) # find the number of airplanes are in this level
+
+# 10000 - 15000
+alt_filter_15000 = (df1['Altitude (ft)'] > 10000) & (df1['Altitude (ft)'] <= 15000)
+three_inc = df1[alt_filter_15000]
+three_inc_avg = three_inc['Altitude (ft)'].mean() # find the average Altitude for this level
+three_inc_count = len(three_inc["Aircraft address"].unique()) # find the number of airplanes are in this level
+
+# 15000 - 20000
+alt_filter_20000 = (df1['Altitude (ft)'] > 15000) & (df1['Altitude (ft)'] <= 20000)
+four_inc = df1[alt_filter_20000]
+four_inc_avg = four_inc['Altitude (ft)'].mean() 
+four_inc_count = len(four_inc["Aircraft address"].unique()) 
+
+# 20000 - 25000
+alt_filter_25000 = (df1['Altitude (ft)'] > 20000) & (df1['Altitude (ft)'] <= 25000)
+five_inc = df1[alt_filter_25000]
+five_inc_avg = five_inc['Altitude (ft)'].mean() 
+five_inc_count = len(five_inc["Aircraft address"].unique()) 
+
+# 25000 - 30000
+alt_filter_30000 = (df1['Altitude (ft)'] > 25000) & (df1['Altitude (ft)'] <= 30000)
+six_inc = df1[alt_filter_30000]
+six_inc_avg = six_inc['Altitude (ft)'].mean() 
+six_inc_count = len(six_inc["Aircraft address"].unique()) 
+
+# 30000 - 35000
+alt_filter_35000 = (df1['Altitude (ft)'] > 30000) & (df1['Altitude (ft)'] <= 35000)
+seven_inc = df1[alt_filter_35000]
+seven_inc_avg = seven_inc['Altitude (ft)'].mean() 
+seven_inc_count = len(seven_inc["Aircraft address"].unique()) 
+
+# 35000 - 40000
+alt_filter_40000 = (df1['Altitude (ft)'] > 35000) & (df1['Altitude (ft)'] <= 40000)
+eight_inc = df1[alt_filter_40000]
+eight_inc_avg = eight_inc['Altitude (ft)'].mean() 
+eight_inc_count = len(eight_inc["Aircraft address"].unique()) 
+
+# 40000 - 45000
+alt_filter_45000 = (df1['Altitude (ft)'] > 40000) & (df1['Altitude (ft)'] <= 45000)
+nine_inc = df1[alt_filter_45000]
+nine_inc_avg = nine_inc['Altitude (ft)'].mean() 
+nine_inc_count = len(nine_inc["Aircraft address"].unique()) 
+
+# 45000 - 50000
+alt_filter_50000 = (df1['Altitude (ft)'] > 45000) & (df1['Altitude (ft)'] <= 50000)
+ten_inc = df1[alt_filter_50000]
+ten_inc_avg = ten_inc['Altitude (ft)'].mean() 
+ten_inc_count = len(ten_inc["Aircraft address"].unique()) 
+
+# 50000 - 55000
+alt_filter_55000 = (df1['Altitude (ft)'] > 50000) & (df1['Altitude (ft)'] <= 55000)
+elev_inc = df1[alt_filter_55000]
+elev_inc_avg = elev_inc['Altitude (ft)'].mean() 
+elev_inc_count = len(elev_inc["Aircraft address"].unique()) 
+
+# there is one datapoints in this interval 55000 - 60000 (not useful datapoints because it is probably a weather balloon)
+
+# align the altitude levels and its varibale name
+x_atl = [5000,10000,15000, 20000, 25000, 30000,35000,40000,45000,50000,55000]
+y_count = [one_inc_count,two_inc_count,three_inc_count,four_inc_count,five_inc_count,six_inc_count,seven_inc_count,eight_inc_count,nine_inc_count,ten_inc_count,elev_inc_count]
+y_avg = [one_inc_avg, two_inc_avg, three_inc_avg, four_inc_avg, five_inc_avg, six_inc_avg, seven_inc_avg, eight_inc_avg, nine_inc_avg, ten_inc_avg, elev_inc_count]
+
+
+
+
+
+
 
