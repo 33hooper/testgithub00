@@ -6,6 +6,7 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import plotly 
 from collections import OrderedDict
+# here i am using the plotly API to import capability of making interactive plots
 plotly.tools.set_credentials_file(username='33hooper', api_key='UwmmblIUP0njMdQYhj5W')
 
 
@@ -135,9 +136,93 @@ x_atl = [5000,10000,15000, 20000, 25000, 30000,35000,40000,45000,50000,55000]
 y_count = [one_inc_count,two_inc_count,three_inc_count,four_inc_count,five_inc_count,six_inc_count,seven_inc_count,eight_inc_count,nine_inc_count,ten_inc_count,elev_inc_count]
 y_avg = [one_inc_avg, two_inc_avg, three_inc_avg, four_inc_avg, five_inc_avg, six_inc_avg, seven_inc_avg, eight_inc_avg, nine_inc_avg, ten_inc_avg, elev_inc_count]
 
+# started with basic plots
+# draw a scatterplot to outline the correlation between count of flights by altitude level
+plt.scatter(x_atl, y_count, label= "count", color= "pink",  
+            marker= "*", s=180) 
+plt.title("Number of Flights Given the Altitude")
+plt.xlabel('Altitude level')
+plt.ylabel('Number of Flights')
+plt.legend()
+plt.show()
+
+# use pie chart to see whats the proportion of flights by levels
+plt.pie(y_count, labels = x_atl,  
+        startangle=10,  
+        radius = 1.3, autopct = '%1.1f%%') 
+plt.title("Number of Flights Given the Altitude")
+plt.xlabel('Altitude level')
+plt.ylabel('Number of Flights')
+plt.show()
+
+# to show the a correlation between altitude level and number of flights
+plt.plot(x_atl, y_count, label = "Flight Count",color='pink', linestyle='dashed', linewidth = 2,
+         marker = "o", markerfacecolor='black', markersize=6)
+plt.title("Number of Flights Given the Altitude")
+plt.xlabel('Altitude level')
+plt.ylabel('Number of Flights')
+plt.legend()
+plt.show()
+
+# this is to investigate the average altitude in different altitude level
+plt.plot(x_atl, y_avg, label = "Altitude Average",color='blue', linestyle='solid', linewidth = 1,
+         marker = "o", markerfacecolor='red', markersize=8)
+plt.title("Altitude Average By Level")
+plt.xlabel('Altitude level')
+plt.ylabel('Average Altitude')
+plt.legend()
+plt.show()
+
+# bargraph to show count, and average altitude (this is a lot more useful in the interactive plot presented later)
+plt.bar(x_atl, y_count, y_avg,  color = ['pink', 'blue', 'green', 'yellow', 'red', 'gray','black','orange','white','brown'])
+plt.title("Flight Count by Levels")
+plt.ylabel('Number of Counts')
+plt.xlabel('Average Altitude')
+plt.show()
+
+# now move into the interactive plots
+# interactive scatterplot
+trace = go.Scatter(
+    x = x_atl,
+    y = y_count,
+    mode = 'markers')
+
+data = [trace]
+py.iplot(data)
+
+# interaction Barplot
+data = [go.Bar(x=x_atl,
+            y= y_count)]
+
+py.iplot(data, filename='Flight Count by Levels')
+
+# interactive barplot (shows distribution)
+trace1 = go.Pie(labels=x_atl, values=y_count)
+py.iplot([trace1], filename='basic_pie_chart')
 
 
+# see the average altitude by Aircraft Address
+df_time = df[['Aircraft address','Time','Altitude (ft)']].dropna()#.groupby('Aircraft address')
+df_time_alt = df_time.groupby('Aircraft address')['Altitude (ft)'].apply(list)      
+# extract dictioanry key-value pairs
+dict_time_alt=dict(df_time_alt)
+# put values in a list
+list_alt = list(dict_time_alt.values())
 
+new_dic_alt = {}
 
+for key in dict_time_alt:
+    new_dic_alt[key] = sum(dict_time_alt[key])/len(dict_time_alt[key])
+    
+# sort the Aircraft Address by average Altitude
+new_dic_alt_ = new_dic_alt
+# use imported OrderDict module
+new_dic_alt_=OrderedDict(sorted(new_dic_alt_.items(), key=lambda x: x[1]))
 
+# make a barplot to show sorted result in ascending order from left to right
+x_address = list(new_dic_alt_.keys())
+y_alt2 = list(new_dic_alt_.values())
 
+data1 = [go.Bar(x=x_address, y= y_alt2)]
+
+py.iplot(data1, filename='Average Altitude by Aircraft Address')
